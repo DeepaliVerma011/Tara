@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "801009243529",
+    "project_id": "tara-3fcff",
+    "storage_bucket": "tara-3fcff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:801009243529:android:a58ee207e5962f6df2fd58",
+        "android_client_info": {
+          "package_name": "com.deepaliverma.tara"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "801009243529-3cojcarea091iokbepedpq89hokc8dm1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deepaliverma.tara",
+            "certificate_hash": "48b6edbadd12ee62ff5c05681ec5d0f1bd25b342"
+          }
+        },
+        {
+          "client_id": "801009243529-udk53canne1495k2h315od3fupgs19sm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9BDBxbf7yxRiQiLrJJjL4YQDVAvJn_EE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "801009243529-udk53canne1495k2h315od3fupgs19sm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
