@@ -5,55 +5,81 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagedList
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.firebase.ui.firestore.paging.FirestorePagingAdapter
+import com.firebase.ui.firestore.paging.FirestorePagingOptions
+import com.firebase.ui.firestore.paging.LoadingState
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import kotlinx.android.synthetic.main.fragment_people.*
+import java.lang.Exception
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PeopleFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PeopleFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+lateinit var mAdapter: FirestorePagingAdapter<User,UsersViewHolder>
+val auth by lazy{
+    FirebaseAuth.getInstance()
+}
+    val database by lazy{
+        FirebaseFirestore.getInstance().collection("users")
+            .orderBy("name",Query.Direction.DESCENDING)
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
+        setUpAdapter()
         return inflater.inflate(R.layout.fragment_people, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PeopleFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PeopleFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private fun setUpAdapter() {
+        val config= PagedList.Config.Builder()
+            .setEnablePlaceholders(false)     //empty values before loading
+            .setPageSize(10)                   //how many items in one call
+            .setPrefetchDistance(2)           //no of pages required to be loaded initially
+            .build()
+
+        val options= FirestorePagingOptions.Builder<User>()
+            .setLifecycleOwner(viewLifecycleOwner)   //livedata
+            .setQuery(database,config,User::class.java)
+            .build()
+mAdapter=object :FirestorePagingAdapter<User,UsersViewHolder>(options){
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
+        val view=layoutInflater.inflate(R.layout.list_item,parent,false)
+        return UsersViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: UsersViewHolder, position: Int, model: User) {
+        holder.bind(user=model)
+    }
+
+    override fun onLoadingStateChanged(state: LoadingState) {
+        super.onLoadingStateChanged(state)
+        when(state){
+            LoadingState.ERROR->{
+
             }
+          LoadingState.FINISHED-> {}
+            LoadingState.LOADING_MORE-> {}
+            LoadingState.LOADING_INITIAL-> {}
+            LoadingState.LOADED-> {}
+        }
+    }
+
+    override fun onError(e: Exception) {
+        super.onError(e)
+    }
+}
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        recyclerView.apply{
+            layoutManager=LinearLayoutManager(requireContext())
+            adapter=mAdapter
+        }
     }
 }
