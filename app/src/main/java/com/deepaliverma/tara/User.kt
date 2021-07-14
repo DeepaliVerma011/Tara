@@ -10,9 +10,9 @@ data class User(
     val uid: String
 ) {
     /** Empty [Constructor] for Firebase */
-    constructor() : this("", "", "", "", "Hey There, I am using whatsapp", false, "")
+    constructor() : this("", "", "", "", "Hey There, I am using Hey ya!", false, "")
 
     constructor(name: String, imageUrl: String, thumbImage: String, uid: String) :
-            this(name, imageUrl, thumbImage, "", uid = uid, status = "Hey There, I am using whatsapp", online = false)
+            this(name, imageUrl, thumbImage, "", uid = uid, status = "Hey There, I am using Hey ya!", online = false)
 
 }

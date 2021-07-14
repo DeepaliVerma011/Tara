@@ -1,5 +1,6 @@
 package com.deepaliverma.tara
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -52,20 +53,45 @@ class PeopleFragment : Fragment() {
             .setQuery(database, config, User::class.java)
             .build()
         mAdapter = object : FirestorePagingAdapter<User, RecyclerView.ViewHolder>(options) {
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-               return when (viewType) {
-                   NORMAL_VIEW_TYPE->UsersViewHolder(layoutInflater.inflate(R.layout.list_item,parent,false))
-                   else->EmptyViewHolder(layoutInflater.inflate(R.layout.empty_view,parent,false))
+            override fun onCreateViewHolder(
+                parent: ViewGroup,
+                viewType: Int
+            ): RecyclerView.ViewHolder {
+                return when (viewType) {
+                    NORMAL_VIEW_TYPE -> UsersViewHolder(
+                        layoutInflater.inflate(
+                            R.layout.list_item,
+                            parent,
+                            false
+                        )
+                    )
+                    else -> EmptyViewHolder(
+                        layoutInflater.inflate(
+                            R.layout.empty_view,
+                            parent,
+                            false
+                        )
+                    )
 
-               }
+                }
             }
 
-            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, model: User) {
-              if(holder is UsersViewHolder){
-                  holder.bind(user =model)
+            override fun onBindViewHolder(
+                holder: RecyclerView.ViewHolder,
+                position: Int,
+                model: User
+            ) {
+             if(holder is UsersViewHolder){
+              holder.bind(user=model){name:String,photo:String,id:String->
+                  val intent = Intent(requireContext(),ChatActivity::class.java)
+                  intent.putExtra(UID,id)
+                  intent.putExtra(NAME,name)
+                  intent.putExtra(IMAGE,photo)
+                  startActivity(intent)
               }
+             }
                 else{
-                    //TODO SOMETHING
+
                 }
             }
 

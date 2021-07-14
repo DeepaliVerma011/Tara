@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.list_item.view.*
 
 
 class UsersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(user: User) =
+    fun bind(user: User,onClick: (name: String, photo: String, id: String) -> Unit) =
         with(itemView) {
             countTv.isVisible = false
             timeTv.isVisible = false
@@ -21,6 +21,9 @@ class UsersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 .error(R.drawable.defaultavatar)
                 .into(userImgView)
 
+            setOnClickListener {
+                onClick.invoke(user.name, user.thumbImage, user.uid)
+            }
         }
 
 }
